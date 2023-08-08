@@ -1,6 +1,5 @@
 ﻿using DAL.Database;
 using DAL.Entity;
-using DAL.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,34 +9,46 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class PostRepositroy : IPost
+    public class PostRepositroy
     {
+        private readonly ApplicationDbContext _context;
 
-        private ApplicationDbContext _Context { get; set; }
-
-        public PostRepositroy(ApplicationDbContext Context)
+        public PostRepositroy(ApplicationDbContext context)
         {
-            this._Context = Context;
-        }
-        public IEnumerable<Post> GetAllPost()
-        {
-            return _Context.Posts.ToList();
+            _context = context;
         }
 
-        public Post GetPostById(int Id)
+        public IEnumerable<Post> GetAllPosts()
         {
-            return _Context.Posts.Find(Id);
+            return _context.Posts.ToList();
         }
 
-        public void InsertPost(Post post)
+        public Post GetPostById(int id)
         {
-            _Context.Posts.Add(post);
+            return _context.Posts.FirstOrDefault(p => p.Id == id);
+        }
+
+        public void AddPost(Post post)
+        {
+            _context.Posts.Add(post);
+            _context.SaveChanges();
         }
 
         public void UpdatePost(Post post)
         {
-            _Context.Entry(post).State = EntityState.Modified;
-
+            _context.Posts.Update(post);
+            _context.SaveChanges();
         }
+
+        public void DeletePost(int id)
+        {
+            var post = _context.Posts.Find(id);
+            if (post != null)
+            {
+                _context.Posts.Remove(post);
+                _context.SaveChanges();
+            }
+        }
+
     }
 }

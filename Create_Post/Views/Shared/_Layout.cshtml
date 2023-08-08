@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - Create_Post</title>
 @*    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 *@    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/bootstrap-icons-1.10.5/font/bootstrap-icons.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Create_Post.styles.css" asp-append-version="true" />
 </head>
@@ -42,7 +44,10 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>   
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+   
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

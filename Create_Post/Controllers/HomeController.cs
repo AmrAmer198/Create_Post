@@ -1,32 +1,54 @@
 ﻿using Create_Post.Models;
+using DAL.Entity;
+using DAL.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Create_Post.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+      
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly PostRepositroy _postRepository;
+
+        public HomeController(PostRepositroy postRepository)
         {
-            _logger = logger;
+            _postRepository = postRepository;
         }
 
         public IActionResult Index()
         {
-            return View();
+            return View(_postRepository.GetAllPosts());
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public IActionResult Create(string postDetails)
         {
-            return View();
+            var post = new Post { PostDetails = postDetails };
+            _postRepository.AddPost(post);
+            return RedirectToAction("Index");
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult Update(int id, string postDetails)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var post = _postRepository.GetPostById(id);
+            if (post != null)
+            {
+                post.PostDetails = postDetails;
+                _postRepository.UpdatePost(post);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            _postRepository.DeletePost(id);
+            return RedirectToAction("Index");
         }
     }
+
 }
